@@ -1,8 +1,8 @@
-//importing inquirer
+//linking inquirer
 const inquirer = require('inquirer'); 
-//importing mysql
+//linking mysql
 const mysql = require('mysql2');
-//importing console.table
+//linking console.table
 const cTable = require('console.table'); 
 
 //connecting to sql database
@@ -18,16 +18,9 @@ const db = mysql.createConnection(
     console.log(`Connected to the courses_db database.`)
 );
 
-connection.connect(function(err) {
-    if (err) throw err
-    console.log("Connected!");
-    promptUser();
-});
-
-
 //setting up inquirer prompts for the user to answer
 const promptUser = () => {
-    inquirer.prompt ([
+    return inquirer.prompt ([
         {
             type: 'list',
             name: 'choices',
