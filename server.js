@@ -15,8 +15,14 @@ const db = mysql.createConnection(
     password: 'password1',
     database: 'employee_db'
     },
-    console.log(`Connected to the courses_db database.`)
+    console.log(`Connected to the courses_db database.`),
 );
+
+db.connect(function(error) {
+    if(error) throw error;
+    console.log("connected at " + db.threadID+"\n");
+    promptUser();
+})
 
 //setting up inquirer prompts for the user to answer
 const promptUser = () => {
@@ -31,7 +37,8 @@ const promptUser = () => {
                     'Add a department',
                     'Add a role',
                     'Add an employee',
-                    'Update an employee role',]
+                    'Update an employee role',
+                    'Quit']
         }
     ])
     .then((answers) => {
@@ -63,6 +70,9 @@ const promptUser = () => {
         if (choices === "Update an employee role") {
             updateRole();
         }
+        if (choices === "Quit") {
+            db.end();
+        }
 
 
     }) 
@@ -71,9 +81,9 @@ const promptUser = () => {
 //defining functions to go with user choices
 function showDepartments(){
     console.log('Showing Departments: ');
-    const mySql = `SELECT department.id AS id, department.name AS department FROM department`; 
+    const mySql = `SELECT department.id AS id, department.name AS name FROM department`; 
 
-    connection.promise().query(mySql, (err, rows) => {
+    db.query(mySql, (err, rows) => {
         if (err) throw err;
         console.table(rows);
         promptUser();
@@ -86,7 +96,7 @@ function showRoles(){
                 FROM role
                 INNER JOIN department ON role.department_id = department.id`;
     
-    connection.promise().query(mySql, (err, rows) => {
+    db.query(mySql, (err, rows) => {
         if (err) throw err; 
         console.table(rows); 
         promptUser();
@@ -106,13 +116,31 @@ function showEmployees(){
                 LEFT JOIN department ON role.department_id = department.id
                 LEFT JOIN employee manager ON employee.manager_id = manager.id`;
 
-    connection.promise().query(mySql, (err, rows) => {
+    db.query(mySql, (err, rows) => {
         if (err) throw err; 
         console.table(rows);
         promptUser();
     });
 };
-function addDepartment(){};
+function addDepartment(){
+    inquirer.prompt([
+        {
+            type: 'input', 
+            name: 'addDept',
+            message: "Please add a department",
+        }
+    ])
+        .then(answer => {
+        const mySql = `INSERT INTO department (name) VALUES (?)`;
+        db.query(mySql, answer.addDept, (err, result) => {
+            if (err) throw err;
+            console.log('Added new Department:  ' + answer.addDept); 
+    
+            showDepartments();
+        });
+    });
+};
+
 function addRole(){};
 function addEmployee(){};
 function updateRole(){};
