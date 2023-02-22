@@ -143,4 +143,57 @@ function addDepartment(){
 
 function addRole(){};
 function addEmployee(){};
-function updateRole(){};
+function updateRole(){
+    const employeeDb = `SELECT * FROM employee`;
+
+    db.query(employeeDb, (err, data) => {
+        if (err) throw err; 
+        const employees = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
+
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'name',
+            message: "Select an employee to update",
+            choices: employees
+        }
+    ])
+        .then(empSelect => {
+            const employee = empSelect.name;
+            const array = []; 
+            array.push(employee);
+
+          const roleDb = `SELECT * FROM role`;
+
+        db.query(roleDb, (err, data) => {
+            if (err) throw err; 
+
+            const roles = data.map(({ id, title }) => ({ name: title, value: id }));
+            
+            inquirer.prompt([
+                {
+                    type: 'list',
+                    name: 'role',
+                    message: "Select the employee's new role",
+                    choices: roles
+                }
+            ])
+                .then(roleSelect => {
+                    const role = roleSelect.role;
+                    array.push(role); 
+                let employee = array[0]
+                    array[0] = role
+                    array[1] = employee 
+                
+                const roleID = `UPDATE employee SET role_id = ? WHERE id = ?`;
+                db.query(roleID, array, (err, result) => {
+                    if (err) throw err;
+                console.log("The employee has been updated.");
+                
+                showEmployees();
+            });
+        });
+        });
+    });
+    });
+};
