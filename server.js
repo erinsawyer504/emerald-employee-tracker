@@ -325,3 +325,18 @@ function updateRole(){
     });
     });
 };
+
+//function to update employee managers
+function updateManager(){};
+
+//function to view employees by manager
+function viewManager(){};
+
+//function to view employees by department
+function viewDepartment(){};
+
+//function to delete department, roles, and employees
+function deleteStuff(){};
+
+//function to view the total utilized budget of a department (the combined salaries of all employees in a dept)
+function viewBudget(){};

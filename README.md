@@ -1,12 +1,11 @@
 # emerald-employee-tracker
 
 ## Description
-
+This is a command-line app that keeps track of an employee database.  Using inquirer, the user can view prompts of different tasks such as view all department, roles, and employees; along with, adding a new department, role, and updating an existing employee by using mysql. 
 
 ## Links
-- [Sample HTML](https://github.com/erinsawyer504/team-profile-generator/blob/main/dist/index.html)
-- [github repo](https://github.com/erinsawyer504/team-profile-generator)
-- [Video Demo](https://drive.google.com/file/d/1x1DT4_B1b5bDiA63j8ZvsHd7A71DtHyn/view)
+- [github repo](https://github.com/erinsawyer504/emerald-employee-tracker)
+- [Video Demo](need to add)
 
 ## Table of Contents
 - [Installation](#installation)  
