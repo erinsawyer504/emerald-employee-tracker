@@ -40,6 +40,7 @@ const promptUser = () => {
                     'Add a role',
                     'Add an employee',
                     'Update an employee role',
+                    'Update an employee manager',
                     'Quit']
         }
     ])
@@ -72,6 +73,11 @@ const promptUser = () => {
         if (choices === "Update an employee role") {
             updateRole();
         }
+
+        if (choices === "Update an employee- manager") {
+            updateManager();
+        }
+-
         if (choices === "Quit") {
             db.end();
         }
@@ -327,7 +333,63 @@ function updateRole(){
 };
 
 //function to update employee managers
-function updateManager(){};
+function updateManager(){
+    const employeeDb = `SELECT * FROM employee`;
+
+    db.query(employeeDb, (err, data) => {
+    if (err) throw err; 
+
+    const employees = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
+
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'name',
+            message: "Select an employee to update",
+            choices: employees
+        }
+    ])
+        .then(empSelect => {
+            const employee = empSelect.name;
+            const array = []; 
+            array.push(employee);
+
+          const managerDb = `SELECT * FROM employee`;
+
+            db.query(managerDb, (err, data) => {
+            if (err) throw err; 
+
+            const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
+    
+                inquirer.prompt([
+                    {
+                        type: 'list',
+                        name: 'manager',
+                        message: "Select the employee's manager",
+                        choices: managers
+                    }
+                ])
+                    .then(managerSelect => {
+                    const manager = managerSelect.manager;
+                    array.push(manager); 
+                
+                    let employee = array[0]
+                    array[0] = manager
+                    array[1] = employee 
+
+                    const updateManager = `UPDATE employee SET manager_id = ? WHERE id = ?`;
+
+                    db.query(updateManager, array, (err, result) => {
+                        if (err) throw err;
+                        console.log("Employee's manager has been updated.");
+                    
+                    showEmployees();
+            });
+        });
+        });
+    });
+    });
+};
 
 //function to view employees by manager
 function viewManager(){};
