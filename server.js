@@ -530,7 +530,35 @@ function deleteDept(){
 };
 
 //function to delete Role
-function deleteRole(){};
+function deleteRole(){
+    const roleDb = `SELECT * FROM role`; 
+
+    db.query(roleDb, (err, data) => {
+        if (err) throw err; 
+
+    const role = data.map(({ title, id }) => ({ name: title, value: id }));
+
+    inquirer.prompt([
+        {
+            type: 'list', 
+            name: 'role',
+            message: "Select a role to delete.",
+            choices: role
+        }
+    ])
+        .then(roleSelect => {
+            const role = roleSelect.role;
+            const mySql = `DELETE FROM role WHERE id = ?`;
+
+        db.query(mySql, role, (err, result) => {
+            if (err) throw err;
+            console.log("The role has been deleted."); 
+
+        showRoles();
+        });
+    });
+    });
+};
 
 //function to delete Employee
 function deleteEmp(){
