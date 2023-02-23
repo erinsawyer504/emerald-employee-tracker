@@ -43,6 +43,7 @@ const promptUser = () => {
                     'Update an employee manager',
                     'View all employees by manager',
                     'View all employees by department',
+                    "View budget",
                     'Quit']
         }
     ])
@@ -87,6 +88,9 @@ const promptUser = () => {
             viewDepartment();
         }
 
+        if (choices === "View budget") {
+            viewBudget();
+        }
         if (choices === "Quit") {
             db.end();
         }
@@ -482,4 +486,18 @@ function viewDepartment(){
 function deleteStuff(){};
 
 //function to view the total utilized budget of a department (the combined salaries of all employees in a dept)
-function viewBudget(){};
+function viewBudget(){
+    const mySql = `SELECT department_id AS id, 
+                department.name AS department,
+                SUM(salary) AS budget
+                FROM  role  
+                JOIN department ON role.department_id = department.id GROUP BY  department_id`;
+
+    db.query(mySql, (err, results) => {
+        if (err) throw err; 
+        console.log("Showing combined budget by department")
+        console.table(results);
+
+    promptUser(); 
+});    
+};
