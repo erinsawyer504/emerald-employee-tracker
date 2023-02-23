@@ -533,7 +533,36 @@ function deleteDept(){
 function deleteRole(){};
 
 //function to delete Employee
-function deleteEmp(){};
+function deleteEmp(){
+    const employeeDb = `SELECT * FROM employee`;
+
+    db.query(employeeDb, (err, data) => {
+        if (err) throw err; 
+
+    const employees = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
+
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'name',
+            message: "Select an employee to delete.",
+            choices: employees
+        }
+    ])
+        .then(empSelect => {
+            const employee = empSelect.name;
+
+            const mySql = `DELETE FROM employee WHERE id = ?`;
+    
+        db.query(mySql, employee, (err, result) => {
+            if (err) throw err;
+            console.log("Employee has been deleted.");
+        
+            showEmployees();
+        });
+    });
+    });
+};
 
 //function to view the total utilized budget of a department (the combined salaries of all employees in a dept)
 function viewBudget(){
