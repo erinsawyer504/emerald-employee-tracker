@@ -41,6 +41,7 @@ const promptUser = () => {
                     'Add an employee',
                     'Update an employee role',
                     'Update an employee manager',
+                    'View all employees by manager',
                     'View all employees by department',
                     'Quit']
         }
@@ -75,13 +76,17 @@ const promptUser = () => {
             updateRole();
         }
 
-        if (choices === "Update an employee- manager") {
+        if (choices === "Update an employee manager") {
             updateManager();
+        }
+        if (choices === "View all employees by manager"){
+            viewManager();
         }
 
         if (choices === "View all employees by department") {
             viewDepartment();
         }
+
         if (choices === "Quit") {
             db.end();
         }
@@ -97,9 +102,9 @@ function showDepartments(){
     console.log('Showing Departments: ');
     const mySql = `SELECT department.id AS id, department.name AS name FROM department`; 
 
-    db.query(mySql, (err, rows) => {
+    db.query(mySql, (err, results) => {
         if (err) throw err;
-        console.table(rows);
+        console.table(results);
         promptUser();
     });
 };
@@ -112,9 +117,9 @@ function showRoles(){
                 FROM role
                 INNER JOIN department ON role.department_id = department.id`;
     
-    db.query(mySql, (err, rows) => {
+    db.query(mySql, (err, results) => {
         if (err) throw err; 
-        console.table(rows); 
+        console.table(results); 
         promptUser();
     })
 };
@@ -134,9 +139,9 @@ function showEmployees(){
                 LEFT JOIN department ON role.department_id = department.id
                 LEFT JOIN employee manager ON employee.manager_id = manager.id`;
 
-    db.query(mySql, (err, rows) => {
+    db.query(mySql, (err, results) => {
         if (err) throw err; 
-        console.table(rows);
+        console.table(results);
         promptUser();
     });
 };
@@ -396,38 +401,43 @@ function updateManager(){
 };
 
 //function to view employees by manager
-// function viewManager(){
-//     const managerDb = `SELECT * FROM employee`;
+function viewManager(){
+    const managerDb = `SELECT * FROM employee WHERE manager_id IS NULL`;
     
-//     db.query(managerDb, (err, data) => {
-//         if (err) throw err;
+    db.query(managerDb, (err, data) => {
+        if (err) throw err;
 
-//         const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
+        const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
 
-//     inquirer.prompt([
-//         {
-//             type: 'list',
-//             name: 'manager',
-//             message: "Select the employee's manager.",
-//             choices: managers
-//         }
-//         ])
-//             .then(managerSelect => {
-//             const manager = managerSelect.manager;
-//             newEmployee.push(manager);
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'manager',
+            message: "Select a manager.",
+            choices: managers
+        }
+        ])
+            .then(managerSelect => {
+            const manager = managerSelect.manager;
 
-//             const employee = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
-//             VALUES (?, ?, ?, ?)`;
+            const mySql = `SELECT employee.first_name, 
+                                employee.last_name, 
+                                employee.manager_id,
+                                department.name AS department
+                                FROM employee 
+                            LEFT JOIN role ON employee.role_id = role.id 
+                            LEFT JOIN department ON role.department_id = department.id
+                            WHERE employee.manager_id = ?`;
 
-//             db.query(employee, newEmployee, (err, result) => {
-//             if (err) throw err;
-//             console.log(newEmployee + " has been added to the db.")
+            db.query(mySql, manager, (err, results) => {
+            if (err) throw err;
+            console.table(results); 
 
-//             showEmployees();
-//         });
-//     });
-// });
-// };
+            promptUser();
+        });
+    });
+});
+};
 
 //function to view employees by department
 function viewDepartment(){
@@ -456,9 +466,9 @@ function viewDepartment(){
                             LEFT JOIN department ON role.department_id = department.id
                             WHERE department.id = ?`;
 
-            db.query(mySql, dept, (err, rows) => {
+            db.query(mySql, dept, (err, results) => {
                 if (err) throw err; 
-                console.table(rows); 
+                console.table(results); 
             promptUser();
 
         })
