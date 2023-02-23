@@ -41,6 +41,7 @@ const promptUser = () => {
                     'Add an employee',
                     'Update an employee role',
                     'Update an employee manager',
+                    'View all employees by department',
                     'Quit']
         }
     ])
@@ -77,7 +78,10 @@ const promptUser = () => {
         if (choices === "Update an employee- manager") {
             updateManager();
         }
--
+
+        if (choices === "View all employees by department") {
+            viewDepartment();
+        }
         if (choices === "Quit") {
             db.end();
         }
@@ -392,10 +396,77 @@ function updateManager(){
 };
 
 //function to view employees by manager
-function viewManager(){};
+// function viewManager(){
+//     const managerDb = `SELECT * FROM employee`;
+    
+//     db.query(managerDb, (err, data) => {
+//         if (err) throw err;
+
+//         const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
+
+//     inquirer.prompt([
+//         {
+//             type: 'list',
+//             name: 'manager',
+//             message: "Select the employee's manager.",
+//             choices: managers
+//         }
+//         ])
+//             .then(managerSelect => {
+//             const manager = managerSelect.manager;
+//             newEmployee.push(manager);
+
+//             const employee = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+//             VALUES (?, ?, ?, ?)`;
+
+//             db.query(employee, newEmployee, (err, result) => {
+//             if (err) throw err;
+//             console.log(newEmployee + " has been added to the db.")
+
+//             showEmployees();
+//         });
+//     });
+// });
+// };
 
 //function to view employees by department
-function viewDepartment(){};
+function viewDepartment(){
+    const deptDb = `SELECT * FROM department`;
+
+    db.query(deptDb, (err, data) => {
+        if (err) throw err;
+        const depts = data.map(({ id, name }) => ({ value: id, name: name }));
+
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'departmentID', 
+                message: 'Select a department',
+                choices: depts
+            }
+        ])
+        .then(deptSelect => {
+            const dept = deptSelect.departmentID;
+
+            const mySql = `SELECT employee.first_name, 
+                                employee.last_name, 
+                                department.name AS department
+                            FROM employee 
+                            LEFT JOIN role ON employee.role_id = role.id 
+                            LEFT JOIN department ON role.department_id = department.id
+                            WHERE department.id = ?`;
+
+            db.query(mySql, dept, (err, rows) => {
+                if (err) throw err; 
+                console.table(rows); 
+            promptUser();
+
+        })
+    })
+
+
+    });          
+};
 
 //function to delete department, roles, and employees
 function deleteStuff(){};
