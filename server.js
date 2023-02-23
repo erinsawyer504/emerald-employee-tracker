@@ -44,6 +44,9 @@ const promptUser = () => {
                     'View all employees by manager',
                     'View all employees by department',
                     "View budget",
+                    "Delete department",
+                    "Delete role",
+                    "Delete employee",
                     'Quit']
         }
     ])
@@ -91,6 +94,19 @@ const promptUser = () => {
         if (choices === "View budget") {
             viewBudget();
         }
+
+        if (choices === "Delete department") {
+            deleteDept();
+        }
+
+        if (choices === "Delete role") {
+            deleteRole();
+        }
+        
+        if (choices === "Delete employee") {
+            deleteEmp();
+        }
+
         if (choices === "Quit") {
             db.end();
         }
@@ -482,8 +498,42 @@ function viewDepartment(){
     });          
 };
 
-//function to delete department, roles, and employees
-function deleteStuff(){};
+//function to delete department
+function deleteDept(){
+    const deptDb = `SELECT * FROM department`; 
+
+    db.query(deptDb, (err, data) => {
+        if (err) throw err; 
+
+        const dept = data.map(({ name, id }) => ({ name: name, value: id }));
+
+    inquirer.prompt([
+        {
+            type: 'list', 
+            name: 'dept',
+            message: "Select a department to delete",
+            choices: dept
+        }
+    ])
+        .then(deptSelect => {
+            const dept = deptSelect.dept;
+            const mySql = `DELETE FROM department WHERE id = ?`;
+
+        db.query(mySql, dept, (err, result) => {
+            if (err) throw err;
+            console.log("Department has been deleted!"); 
+
+        showDepartments();
+        });
+    });
+    });
+};
+
+//function to delete Role
+function deleteRole(){};
+
+//function to delete Employee
+function deleteEmp(){};
 
 //function to view the total utilized budget of a department (the combined salaries of all employees in a dept)
 function viewBudget(){
