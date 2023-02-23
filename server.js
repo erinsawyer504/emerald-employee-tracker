@@ -13,7 +13,7 @@ const db = mysql.createConnection(
     host: 'localhost',
       // MySQL username,
     user: 'root',
-      // MySQL password
+      // MySQL password - password protected by .env
     password: process.env.DB_PASSWORD,
     database: 'employee_db'
     },
@@ -81,6 +81,8 @@ const promptUser = () => {
 }
 
 //defining functions to go with user choices
+
+//function will show all departments (Department ID, and department name) when selected
 function showDepartments(){
     console.log('Showing Departments: ');
     const mySql = `SELECT department.id AS id, department.name AS name FROM department`; 
@@ -91,6 +93,8 @@ function showDepartments(){
         promptUser();
     });
 };
+
+//function will show all roles when selected.  (will show role id, title, department name, and salary)
 function showRoles(){
     console.log('Showing roles');
 
@@ -104,6 +108,8 @@ function showRoles(){
         promptUser();
     })
 };
+
+//function will show all employees when selected 
 function showEmployees(){
     console.log('Showing employees'); 
     const mySql = `SELECT employee.id, 
@@ -124,6 +130,8 @@ function showEmployees(){
         promptUser();
     });
 };
+
+//function will add a new department to the DB
 function addDepartment(){
     inquirer.prompt([
         {
@@ -143,6 +151,7 @@ function addDepartment(){
     });
 };
 
+//function adds a new role to the DB - user will need to input the role name, salary, and the deparment it belongs in
 function addRole(){
     inquirer.prompt([
         {
@@ -191,6 +200,7 @@ function addRole(){
     });
 };
 
+//function will add a new employee to DB.  User will enter first/last name, select the role, and assign a manager
 function addEmployee(){
     inquirer.prompt([
         {
@@ -259,6 +269,8 @@ function addEmployee(){
         });
     });
 };
+
+//function will update an employee role - it will have the user select a current employee from the list and assign it a new role
 function updateRole(){
     const employeeDb = `SELECT * FROM employee`;
 
