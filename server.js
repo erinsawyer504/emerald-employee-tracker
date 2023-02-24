@@ -3,7 +3,8 @@ const inquirer = require('inquirer');
 //importing mysql
 const mysql = require('mysql2');
 //importing console.table
-const cTable = require('console.table'); 
+const cTable = require('console.table');
+//importing colors to stylize the console 
 var colors = require('colors');
 var colors = require('colors/safe');
 
