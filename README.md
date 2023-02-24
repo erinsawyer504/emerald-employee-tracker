@@ -5,7 +5,7 @@ This is a command-line app that keeps track of an employee database.  Using inqu
 
 ## Links
 - [github repo](https://github.com/erinsawyer504/emerald-employee-tracker)
-- [Video Demo](need to add)
+- [Video Demo](https://drive.google.com/file/d/1tFD3GZCCvZJLEk451Qlv1TbmNlZKTe1i/view)
 
 ## Table of Contents
 - [Installation](#installation)  
@@ -33,6 +33,6 @@ This application does not use any tests.
 
 ## Questions
 GitHub username: erinsawyer504, 
-GitHub profile: (https://www.github.com/erinsawyer504)    
+[GitHub profile](https://www.github.com/erinsawyer504)    
 Email address: erinsawyer504@gmail.com  
 If you have additional questions, please feel free to email me.
