@@ -308,7 +308,7 @@ function addEmployee(){
                         db.query(employee, newEmployee, (err, result) => {
                         if (err) throw err;
                         console.log("----------------------------------------------".rainbow);
-                        console.log(colors.green.bold(newEmployee + " has been added to the db."));
+                        console.log(colors.green.bold(newEmployee[0] + " " + newEmployee[1] + " has been added to the db."));
                         showEmployees();
                     });
                 });

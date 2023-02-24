@@ -20,7 +20,7 @@ Clone the repo into your vs code, install inquirer if needed by typing "npm i in
 
 ## Usage
 Here is a screenshot that shows how the app runs
-![Demo of Employee Tracker App](./assets/teamprofile.PNG)
+![Demo of Employee Tracker App](./assets/employeeTracker.PNG)
 
 ## License
 This repository is not covered under any license.
