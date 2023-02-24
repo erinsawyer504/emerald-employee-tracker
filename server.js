@@ -1,9 +1,10 @@
-//linking inquirer
+//importing inquirer
 const inquirer = require('inquirer'); 
-//linking mysql
+//importing mysql
 const mysql = require('mysql2');
-//linking console.table
+//importing console.table
 const cTable = require('console.table'); 
+var colors = require('colors');
 
 require('dotenv').config();
 
@@ -119,19 +120,22 @@ const promptUser = () => {
 
 //function will show all departments (Department ID, and department name) when selected
 function showDepartments(){
-    console.log('Showing Departments: ');
+
     const mySql = `SELECT department.id AS id, department.name AS name FROM department`; 
 
     db.query(mySql, (err, results) => {
         if (err) throw err;
+        console.log("----------------------------------------------".rainbow);
+        console.log("Showing all Departments");
+        console.log("----------------------------------------------".rainbow);
         console.table(results);
+        console.log("----------------------------------------------".rainbow);
         promptUser();
     });
 };
 
 //function will show all roles when selected.  (will show role id, title, department name, and salary)
 function showRoles(){
-    console.log('Showing roles');
 
     const mySql = `SELECT role.id, role.title, department.name AS department, role.salary 
                 FROM role
@@ -139,14 +143,18 @@ function showRoles(){
     
     db.query(mySql, (err, results) => {
         if (err) throw err; 
+        console.log("----------------------------------------------".rainbow);
+        console.log("Showing all Roles");
+        console.log("----------------------------------------------".rainbow);
         console.table(results); 
+        console.log("----------------------------------------------".rainbow);
         promptUser();
     })
 };
 
 //function will show all employees when selected 
 function showEmployees(){
-    console.log('Showing employees'); 
+
     const mySql = `SELECT employee.id, 
                 employee.first_name, 
                 employee.last_name, 
@@ -161,7 +169,11 @@ function showEmployees(){
 
     db.query(mySql, (err, results) => {
         if (err) throw err; 
+        console.log("----------------------------------------------".rainbow);
+        console.log("Showing all employees")
+        console.log("----------------------------------------------".rainbow);
         console.table(results);
+        console.log("----------------------------------------------".rainbow);
         promptUser();
     });
 };
@@ -179,8 +191,8 @@ function addDepartment(){
         const mySql = `INSERT INTO department (name) VALUES (?)`;
         db.query(mySql, answer.addDept, (err, result) => {
             if (err) throw err;
+            console.log("----------------------------------------------".rainbow);
             console.log('Added new Department:  ' + answer.addDept); 
-    
             showDepartments();
         });
     });
@@ -226,8 +238,8 @@ function addRole(){
                 const newRole = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`;
                 db.query(newRole, roleSalary, (err, result) => {
                     if (err) throw err;
+                    console.log("----------------------------------------------".rainbow);
                     console.log('Added new Role:  ' + answer.role); 
-    
                 showRoles();
             });
         });
@@ -294,8 +306,8 @@ function addEmployee(){
     
                         db.query(employee, newEmployee, (err, result) => {
                         if (err) throw err;
+                        console.log("----------------------------------------------".rainbow);
                         console.log(newEmployee + " has been added to the db.")
-    
                         showEmployees();
                     });
                 });
@@ -351,8 +363,8 @@ function updateRole(){
                 const roleID = `UPDATE employee SET role_id = ? WHERE id = ?`;
                 db.query(roleID, array, (err, result) => {
                     if (err) throw err;
+                    console.log("----------------------------------------------".rainbow);
                 console.log("The employee has been updated.");
-                
                 showEmployees();
             });
         });
@@ -410,8 +422,8 @@ function updateManager(){
 
                     db.query(updateManager, array, (err, result) => {
                         if (err) throw err;
+                        console.log("----------------------------------------------".rainbow);
                         console.log("Employee's manager has been updated.");
-                    
                     showEmployees();
             });
         });
@@ -451,7 +463,11 @@ function viewManager(){
 
             db.query(mySql, manager, (err, results) => {
             if (err) throw err;
+            console.log("----------------------------------------------".rainbow);
+            console.log("Showing all employees for selected manager")
+            console.log("----------------------------------------------".rainbow);
             console.table(results); 
+            console.log("----------------------------------------------".rainbow);
 
             promptUser();
         });
@@ -488,7 +504,11 @@ function viewDepartment(){
 
             db.query(mySql, dept, (err, results) => {
                 if (err) throw err; 
+                console.log("----------------------------------------------".rainbow);
+                console.log("Showing all employees for selected department");
+                console.log("----------------------------------------------".rainbow);
                 console.table(results); 
+                console.log("----------------------------------------------".rainbow);
             promptUser();
 
         })
@@ -521,8 +541,8 @@ function deleteDept(){
 
         db.query(mySql, dept, (err, result) => {
             if (err) throw err;
+            console.log("----------------------------------------------".rainbow);
             console.log("Department has been deleted!"); 
-
         showDepartments();
         });
     });
@@ -552,8 +572,8 @@ function deleteRole(){
 
         db.query(mySql, role, (err, result) => {
             if (err) throw err;
+            console.log("----------------------------------------------".rainbow);
             console.log("The role has been deleted."); 
-
         showRoles();
         });
     });
@@ -584,8 +604,8 @@ function deleteEmp(){
     
         db.query(mySql, employee, (err, result) => {
             if (err) throw err;
+            console.log("----------------------------------------------".rainbow);
             console.log("Employee has been deleted.");
-        
             showEmployees();
         });
     });
@@ -602,8 +622,11 @@ function viewBudget(){
 
     db.query(mySql, (err, results) => {
         if (err) throw err; 
-        console.log("Showing combined budget by department")
+        console.log("----------------------------------------------".rainbow);
+        console.log("Showing combined budget by department");
+        console.log("----------------------------------------------".rainbow);
         console.table(results);
+        console.log("----------------------------------------------".rainbow);
 
     promptUser(); 
 });    
