@@ -5,6 +5,7 @@ const mysql = require('mysql2');
 //importing console.table
 const cTable = require('console.table'); 
 var colors = require('colors');
+var colors = require('colors/safe');
 
 require('dotenv').config();
 
@@ -126,7 +127,7 @@ function showDepartments(){
     db.query(mySql, (err, results) => {
         if (err) throw err;
         console.log("----------------------------------------------".rainbow);
-        console.log("Showing all Departments");
+        console.log("Showing all Departments".bold.cyan);
         console.log("----------------------------------------------".rainbow);
         console.table(results);
         console.log("----------------------------------------------".rainbow);
@@ -144,7 +145,7 @@ function showRoles(){
     db.query(mySql, (err, results) => {
         if (err) throw err; 
         console.log("----------------------------------------------".rainbow);
-        console.log("Showing all Roles");
+        console.log("Showing all Roles".bold.cyan);
         console.log("----------------------------------------------".rainbow);
         console.table(results); 
         console.log("----------------------------------------------".rainbow);
@@ -170,7 +171,7 @@ function showEmployees(){
     db.query(mySql, (err, results) => {
         if (err) throw err; 
         console.log("----------------------------------------------".rainbow);
-        console.log("Showing all employees")
+        console.log("Showing all employees".bold.cyan);
         console.log("----------------------------------------------".rainbow);
         console.table(results);
         console.log("----------------------------------------------".rainbow);
@@ -192,7 +193,7 @@ function addDepartment(){
         db.query(mySql, answer.addDept, (err, result) => {
             if (err) throw err;
             console.log("----------------------------------------------".rainbow);
-            console.log('Added new Department:  ' + answer.addDept); 
+            console.log(colors.green.bold('Added new Department:  ' + answer.addDept)); 
             showDepartments();
         });
     });
@@ -239,7 +240,7 @@ function addRole(){
                 db.query(newRole, roleSalary, (err, result) => {
                     if (err) throw err;
                     console.log("----------------------------------------------".rainbow);
-                    console.log('Added new Role:  ' + answer.role); 
+                    console.log(colors.green.bold('Added new Role:  ' + answer.role)); 
                 showRoles();
             });
         });
@@ -307,7 +308,7 @@ function addEmployee(){
                         db.query(employee, newEmployee, (err, result) => {
                         if (err) throw err;
                         console.log("----------------------------------------------".rainbow);
-                        console.log(newEmployee + " has been added to the db.")
+                        console.log(colors.green.bold(newEmployee + " has been added to the db."));
                         showEmployees();
                     });
                 });
@@ -364,7 +365,7 @@ function updateRole(){
                 db.query(roleID, array, (err, result) => {
                     if (err) throw err;
                     console.log("----------------------------------------------".rainbow);
-                console.log("The employee has been updated.");
+                console.log(colors.yellow.bold("The employee has been updated."));
                 showEmployees();
             });
         });
@@ -423,7 +424,7 @@ function updateManager(){
                     db.query(updateManager, array, (err, result) => {
                         if (err) throw err;
                         console.log("----------------------------------------------".rainbow);
-                        console.log("Employee's manager has been updated.");
+                        console.log(colors.yellow.bold("Employee's manager has been updated."));
                     showEmployees();
             });
         });
@@ -464,7 +465,7 @@ function viewManager(){
             db.query(mySql, manager, (err, results) => {
             if (err) throw err;
             console.log("----------------------------------------------".rainbow);
-            console.log("Showing all employees for selected manager")
+            console.log(colors.magenta.bold("Showing all employees for selected manager"))
             console.log("----------------------------------------------".rainbow);
             console.table(results); 
             console.log("----------------------------------------------".rainbow);
@@ -505,7 +506,7 @@ function viewDepartment(){
             db.query(mySql, dept, (err, results) => {
                 if (err) throw err; 
                 console.log("----------------------------------------------".rainbow);
-                console.log("Showing all employees for selected department");
+                console.log(colors.magenta.bold("Showing all employees for selected department"));
                 console.log("----------------------------------------------".rainbow);
                 console.table(results); 
                 console.log("----------------------------------------------".rainbow);
@@ -542,7 +543,7 @@ function deleteDept(){
         db.query(mySql, dept, (err, result) => {
             if (err) throw err;
             console.log("----------------------------------------------".rainbow);
-            console.log("Department has been deleted!"); 
+            console.log(colors.red.bold("Department has been deleted!")); 
         showDepartments();
         });
     });
@@ -573,7 +574,7 @@ function deleteRole(){
         db.query(mySql, role, (err, result) => {
             if (err) throw err;
             console.log("----------------------------------------------".rainbow);
-            console.log("The role has been deleted."); 
+            console.log(colors.red.bold("The role has been deleted.")); 
         showRoles();
         });
     });
@@ -605,7 +606,7 @@ function deleteEmp(){
         db.query(mySql, employee, (err, result) => {
             if (err) throw err;
             console.log("----------------------------------------------".rainbow);
-            console.log("Employee has been deleted.");
+            console.log(colors.red.bold("Employee has been deleted."));
             showEmployees();
         });
     });
@@ -623,7 +624,7 @@ function viewBudget(){
     db.query(mySql, (err, results) => {
         if (err) throw err; 
         console.log("----------------------------------------------".rainbow);
-        console.log("Showing combined budget by department");
+        console.log(colors.brightGreen.bold("Showing combined budget by department"));
         console.log("----------------------------------------------".rainbow);
         console.table(results);
         console.log("----------------------------------------------".rainbow);
